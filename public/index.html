@@ -1,184 +1,183 @@
-Cloud Deployment Demo
-    
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-        h1 { 
-            color: #667eea; 
-            margin-bottom: 10px; 
-        }
-        h3 {
-            color: #333;
-            margin-top: 20px;
-            margin-bottom: 10px;
-        }
-        .subtitle { 
-            color: #666; 
-            margin-bottom: 30px; 
-        }
-        .btn-group { 
-            display: flex; 
-            gap: 10px; 
-            flex-wrap: wrap; 
-            margin: 20px 0; 
-        }
-        button {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
-        }
-        .btn-primary {
-            background: #667eea;
-            color: white;
-        }
-        .btn-primary:hover { 
-            background: #5568d3; 
-            transform: translateY(-2px); 
-        }
-        .btn-secondary {
-            background: #48bb78;
-            color: white;
-        }
-        .btn-secondary:hover { 
-            background: #38a169; 
-            transform: translateY(-2px); 
-        }
-        .btn-tertiary {
-            background: #ed8936;
-            color: white;
-        }
-        .btn-tertiary:hover { 
-            background: #dd6b20; 
-            transform: translateY(-2px); 
-        }
-        .response {
-            background: #f7fafc;
-            border-left: 4px solid #667eea;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-            display: none;
-        }
-        .response.show { 
-            display: block; 
-        }
-        pre {
-            background: #2d3748;
-            color: #68d391;
-            padding: 15px;
-            border-radius: 8px;
-            overflow-x: auto;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-        .info-box {
-            background: #bee3f8;
-            border-left: 4px solid #3182ce;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-        .platform-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-top: 5px;
-        }
-        .badge-paas { 
-            background: #fbd38d; 
-            color: #744210; 
-        }
-        .badge-serverless { 
-            background: #9ae6b4; 
-            color: #22543d; 
-        }
-    
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cloud Deployment Demo</title>
+  <style>
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    h1 { 
+      color: #667eea; 
+      margin-bottom: 10px; 
+    }
+    h3 {
+      color: #333;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    .subtitle { 
+      color: #666; 
+      margin-bottom: 30px; 
+    }
+    .btn-group { 
+      display: flex; 
+      gap: 10px; 
+      flex-wrap: wrap; 
+      margin: 20px 0; 
+    }
+    button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 600;
+    }
+    .btn-primary {
+      background: #667eea;
+      color: white;
+    }
+    .btn-primary:hover { 
+      background: #5568d3; 
+      transform: translateY(-2px); 
+    }
+    .btn-secondary {
+      background: #48bb78;
+      color: white;
+    }
+    .btn-secondary:hover { 
+      background: #38a169; 
+      transform: translateY(-2px); 
+    }
+    .btn-tertiary {
+      background: #ed8936;
+      color: white;
+    }
+    .btn-tertiary:hover { 
+      background: #dd6b20; 
+      transform: translateY(-2px); 
+    }
+    .response {
+      background: #f7fafc;
+      border-left: 4px solid #667eea;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+      display: none;
+    }
+    .response.show { 
+      display: block; 
+    }
+    pre {
+      background: #2d3748;
+      color: #68d391;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    .info-box {
+      background: #bee3f8;
+      border-left: 4px solid #3182ce;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+    .platform-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 5px;
+    }
+    .badge-paas { 
+      background: #fbd38d; 
+      color: #744210; 
+    }
+    .badge-serverless { 
+      background: #9ae6b4; 
+      color: #22543d; 
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>☁️ Cloud Deployment Demo</h1>
+    <p class="subtitle">Compare PaaS (Render) vs Serverless (Vercel)</p>
 
+    <div class="info-box">
+      🎯 <strong>What you are seeing:</strong><br />
+      If deployed on Render: Traditional always-on server (PaaS)<br />
+      If deployed on Vercel: Serverless functions (FaaS)
+    </div>
 
-    
-        ☁️ Cloud Deployment Demo
-        Compare PaaS (Render) vs Serverless (Vercel)
-        
-        
-            🎯 What you are seeing:
-            If deployed on Render: Traditional always-on server (PaaS)
-            If deployed on Vercel: Serverless functions (FaaS)
-        
+    <h3>Test the API Endpoints:</h3>
+    <div class="btn-group">
+      <button class="btn-primary" onclick="testEndpoint('/api/hello')">Test Hello API</button>
+      <button class="btn-secondary" onclick="testEndpoint('/api/users')">Test Users API</button>
+      <button class="btn-tertiary" onclick="testEndpoint('/api/time')">Test Time API</button>
+    </div>
 
-        Test the API Endpoints:
-        
-            
-                Test Hello API
-            
-            
-                Test Users API
-            
-            
-                Test Time API
-            
-        
+    <div id="response" class="response">
+      <div id="platform-info"></div>
+      <pre id="json-output"></pre>
+    </div>
+  </div>
 
-        
-            Response:
-            
-            
-        
-    
+  <script>
+    async function testEndpoint(endpoint) {
+      const responseDiv = document.getElementById('response');
+      const platformInfo = document.getElementById('platform-info');
+      const jsonOutput = document.getElementById('json-output');
 
-    
-        async function testEndpoint(endpoint) {
-            const responseDiv = document.getElementById('response');
-            const platformInfo = document.getElementById('platform-info');
-            const jsonOutput = document.getElementById('json-output');
-            
-            try {
-                const startTime = performance.now();
-                const response = await fetch(endpoint);
-                const endTime = performance.now();
-                const data = await response.json();
-                
-                const loadTime = (endTime - startTime).toFixed(2);
-                
-                const isPaaS = data.platform && data.platform.includes('Render');
-                const badgeClass = isPaaS ? 'badge-paas' : 'badge-serverless';
-                const badgeText = isPaaS ? 'PaaS - Always Running' : 'Serverless - On Demand';
-                
-                let platformHTML = '' + badgeText + '';
-                platformHTML += '';
-                platformHTML += 'Response Time: ' + loadTime + 'ms';
-                if (!isPaaS) {
-                    platformHTML += 'Note: First request may be slower (cold start)';
-                }
-                platformHTML += '';
-                
-                platformInfo.innerHTML = platformHTML;
-                jsonOutput.textContent = JSON.stringify(data, null, 2);
-                responseDiv.classList.add('show');
-            } catch (error) {
-                platformInfo.innerHTML = '';
-                jsonOutput.textContent = 'Error: ' + error.message;
-                responseDiv.classList.add('show');
-            }
+      try {
+        const startTime = performance.now();
+        const response = await fetch(endpoint);
+        const endTime = performance.now();
+        const data = await response.json();
+
+        const loadTime = (endTime - startTime).toFixed(2);
+
+        const isPaaS = data.platform && data.platform.includes('Render');
+        const badgeClass = isPaaS ? 'badge-paas' : 'badge-serverless';
+        const badgeText = isPaaS ? 'PaaS - Always Running' : 'Serverless - On Demand';
+
+        let platformHTML = `<div class="platform-badge ${badgeClass}">${badgeText}</div>`;
+        platformHTML += `<p><strong>Response Time:</strong> ${loadTime}ms</p>`;
+        if (!isPaaS) {
+          platformHTML += `<p><em>Note: First request may be slower (cold start)</em></p>`;
         }
+
+        platformInfo.innerHTML = platformHTML;
+        jsonOutput.textContent = JSON.stringify(data, null, 2);
+        responseDiv.classList.add('show');
+      } catch (error) {
+        platformInfo.innerHTML = '<p><strong>Error occurred</strong></p>';
+        jsonOutput.textContent = 'Error: ' + (error.message || 'Unknown error');
+        responseDiv.classList.add('show');
+      }
+    }
+  </script>
+</body>
+</html>
