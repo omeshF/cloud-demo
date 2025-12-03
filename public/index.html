@@ -1,6 +1,10 @@
 Cloud Deployment Demo
     
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -15,9 +19,25 @@ Cloud Deployment Demo
             padding: 40px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
-        h1 { color: #667eea; margin-bottom: 10px; }
-        .subtitle { color: #666; margin-bottom: 30px; }
-        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin: 20px 0; }
+        h1 { 
+            color: #667eea; 
+            margin-bottom: 10px; 
+        }
+        h3 {
+            color: #333;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .subtitle { 
+            color: #666; 
+            margin-bottom: 30px; 
+        }
+        .btn-group { 
+            display: flex; 
+            gap: 10px; 
+            flex-wrap: wrap; 
+            margin: 20px 0; 
+        }
         button {
             padding: 12px 24px;
             border: none;
@@ -31,17 +51,26 @@ Cloud Deployment Demo
             background: #667eea;
             color: white;
         }
-        .btn-primary:hover { background: #5568d3; transform: translateY(-2px); }
+        .btn-primary:hover { 
+            background: #5568d3; 
+            transform: translateY(-2px); 
+        }
         .btn-secondary {
             background: #48bb78;
             color: white;
         }
-        .btn-secondary:hover { background: #38a169; transform: translateY(-2px); }
+        .btn-secondary:hover { 
+            background: #38a169; 
+            transform: translateY(-2px); 
+        }
         .btn-tertiary {
             background: #ed8936;
             color: white;
         }
-        .btn-tertiary:hover { background: #dd6b20; transform: translateY(-2px); }
+        .btn-tertiary:hover { 
+            background: #dd6b20; 
+            transform: translateY(-2px); 
+        }
         .response {
             background: #f7fafc;
             border-left: 4px solid #667eea;
@@ -50,7 +79,9 @@ Cloud Deployment Demo
             margin-top: 20px;
             display: none;
         }
-        .response.show { display: block; }
+        .response.show { 
+            display: block; 
+        }
         pre {
             background: #2d3748;
             color: #68d391;
@@ -58,6 +89,7 @@ Cloud Deployment Demo
             border-radius: 8px;
             overflow-x: auto;
             margin-top: 10px;
+            font-size: 14px;
         }
         .info-box {
             background: #bee3f8;
@@ -74,8 +106,14 @@ Cloud Deployment Demo
             font-weight: 600;
             margin-top: 5px;
         }
-        .badge-paas { background: #fbd38d; color: #744210; }
-        .badge-serverless { background: #9ae6b4; color: #22543d; }
+        .badge-paas { 
+            background: #fbd38d; 
+            color: #744210; 
+        }
+        .badge-serverless { 
+            background: #9ae6b4; 
+            color: #22543d; 
+        }
     
 
 
@@ -84,7 +122,7 @@ Cloud Deployment Demo
         Compare PaaS (Render) vs Serverless (Vercel)
         
         
-            🎯 What you're seeing:
+            🎯 What you are seeing:
             If deployed on Render: Traditional always-on server (PaaS)
             If deployed on Vercel: Serverless functions (FaaS)
         
@@ -123,24 +161,24 @@ Cloud Deployment Demo
                 
                 const loadTime = (endTime - startTime).toFixed(2);
                 
-                // Show platform info
                 const isPaaS = data.platform && data.platform.includes('Render');
-                const badge = isPaaS ? 
-                    'PaaS - Always Running' :
-                    'Serverless - On Demand';
+                const badgeClass = isPaaS ? 'badge-paas' : 'badge-serverless';
+                const badgeText = isPaaS ? 'PaaS - Always Running' : 'Serverless - On Demand';
                 
-                platformInfo.innerHTML = `
-                    ${badge}
-                    
-                        Response Time: ${loadTime}ms
-                        ${!isPaaS ? 'Note: First request may be slower (cold start)' : ''}
-                    
-                `;
+                let platformHTML = '' + badgeText + '';
+                platformHTML += '';
+                platformHTML += 'Response Time: ' + loadTime + 'ms';
+                if (!isPaaS) {
+                    platformHTML += 'Note: First request may be slower (cold start)';
+                }
+                platformHTML += '';
                 
+                platformInfo.innerHTML = platformHTML;
                 jsonOutput.textContent = JSON.stringify(data, null, 2);
                 responseDiv.classList.add('show');
             } catch (error) {
-                jsonOutput.textContent = `Error: ${error.message}`;
+                platformInfo.innerHTML = '';
+                jsonOutput.textContent = 'Error: ' + error.message;
                 responseDiv.classList.add('show');
             }
         }
