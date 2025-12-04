@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cloud Deployment Demo</title>
+  <title>Cloud Deployment Demo & Quiz</title>
   <style>
     * { 
       margin: 0; 
@@ -17,7 +17,7 @@
       padding: 20px;
     }
     .container {
-      max-width: 800px;
+      max-width: 1000px;
       margin: 0 auto;
       background: white;
       border-radius: 20px;
@@ -27,6 +27,12 @@
     h1 { 
       color: #667eea; 
       margin-bottom: 10px; 
+    }
+    h2 {
+      color: #333;
+      margin: 25px 0 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e2e8f0;
     }
     h3 {
       color: #333;
@@ -76,6 +82,14 @@
       background: #dd6b20; 
       transform: translateY(-2px); 
     }
+    .btn-danger {
+      background: #f56565;
+      color: white;
+    }
+    .btn-danger:hover { 
+      background: #e53e3e; 
+      transform: translateY(-2px); 
+    }
     .response {
       background: #f7fafc;
       border-left: 4px solid #667eea;
@@ -119,12 +133,133 @@
       background: #9ae6b4; 
       color: #22543d; 
     }
+    
+    /* Quiz Styles */
+    .quiz-section {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 2px solid #e2e8f0;
+    }
+    .quiz-card {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 25px;
+      margin: 20px 0;
+      border: 1px solid #e2e8f0;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #4a5568;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    .question {
+      margin: 25px 0;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      border-left: 4px solid #667eea;
+    }
+    .question h4 {
+      margin-bottom: 15px;
+      color: #2d3748;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .option {
+      padding: 12px;
+      background: #f7fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .option:hover {
+      background: #edf2f7;
+      border-color: #cbd5e0;
+    }
+    .option.selected {
+      background: #c6f6d5;
+      border-color: #48bb78;
+    }
+    .option.correct {
+      background: #c6f6d5;
+      border-color: #48bb78;
+    }
+    .option.incorrect {
+      background: #fed7d7;
+      border-color: #f56565;
+    }
+    .timer {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: white;
+      padding: 15px 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      font-size: 20px;
+      font-weight: bold;
+      color: #667eea;
+    }
+    .leaderboard {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+    .leaderboard table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .leaderboard th {
+      background: #667eea;
+      color: white;
+      padding: 12px;
+      text-align: left;
+    }
+    .leaderboard td {
+      padding: 12px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .leaderboard tr:nth-child(even) {
+      background: #edf2f7;
+    }
+    .winner {
+      background: #fefcbf !important;
+      font-weight: bold;
+    }
+    .medal {
+      font-size: 24px;
+      margin-right: 10px;
+    }
+    .gold { color: #f6ad55; }
+    .silver { color: #a0aec0; }
+    .bronze { color: #ed8936; }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>☁️ Cloud Deployment Demo</h1>
-    <p class="subtitle">Compare PaaS (Render) vs Serverless (Vercel)</p>
+    <p class="subtitle">Compare PaaS (Render) vs Serverless (Vercel) + Quiz</p>
 
     <div class="info-box">
       <strong>What you are seeing:</strong><br />
@@ -132,61 +267,8 @@
       If deployed on Vercel: Serverless functions (FaaS)
     </div>
 
-    <!-- ⭐ Comparison Table Toggle Button -->
-    <button class="btn-primary" onclick="toggleComparison()">Show Comparison Table</button>
-
-    <!-- ⭐ Hidden Comparison Table Section -->
-    <div id="comparison-section" style="display:none; margin-top:20px;">
-      <h3>Render (PaaS) vs Vercel (Serverless)</h3>
-
-      <table style="
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-        background: #f7fafc;
-        border-radius: 12px;
-        overflow: hidden;
-        font-size: 15px;
-      ">
-        <thead>
-          <tr style="background: #667eea; color: white; text-align: left;">
-            <th style="padding: 12px;">Feature</th>
-            <th style="padding: 12px;">Render (PaaS)</th>
-            <th style="padding: 12px;">Vercel (Serverless)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">Execution Model</td>
-            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">Always running server</td>
-            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">Runs on demand per request</td>
-          </tr>
-          <tr style="background: #edf2f7;">
-            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">Scaling</td>
-            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">Manual or auto-scale server</td>
-            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">Automatic per-function scaling</td>
-          </tr>
-          <tr>
-            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">Startup Time</td>
-            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">No cold start</td>
-            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">May have cold start on first request</td>
-          </tr>
-          <tr style="background: #edf2f7;">
-            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">Cost Model</td>
-            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">Pay for full uptime</td>
-            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">Pay per execution</td>
-          </tr>
-          <tr>
-            <td style="padding: 12px;">Best For</td>
-            <td style="padding: 12px;">APIs, backend services, long-running apps</td>
-            <td style="padding: 12px;">Event-driven APIs, short tasks, high scaling needs</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- ⭐ API Test Buttons -->
-    <h3>Test the API Endpoints:</h3>
+    <!-- API Testing Section -->
+    <h2>API Testing</h2>
     <div class="btn-group">
       <button class="btn-primary" onclick="testEndpoint('/api/hello')">Test Hello API</button>
       <button class="btn-secondary" onclick="testEndpoint('/api/users')">Test Users API</button>
@@ -197,16 +279,153 @@
       <div id="platform-info"></div>
       <pre id="json-output"></pre>
     </div>
+
+    <!-- Quiz Section -->
+    <div class="quiz-section">
+      <h2>Cloud Computing Quiz</h2>
+      
+      <!-- Student Registration -->
+      <div id="registration-card" class="quiz-card">
+        <h3>👤 Student Registration</h3>
+        <div class="form-group">
+          <label for="studentName">Enter Your Name:</label>
+          <input type="text" id="studentName" placeholder="e.g., John Doe" />
+        </div>
+        <button class="btn-primary" onclick="startQuiz()">Start Quiz</button>
+      </div>
+
+      <!-- Quiz Questions (Initially Hidden) -->
+      <div id="quiz-questions" class="quiz-card" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h3>📝 Cloud Computing Quiz</h3>
+          <div id="question-counter">Question 1/6</div>
+        </div>
+        
+        <div id="questions-container">
+          <!-- Questions will be inserted here by JavaScript -->
+        </div>
+        
+        <div style="display: flex; justify-content: space-between; margin-top: 30px;">
+          <button class="btn-tertiary" onclick="prevQuestion()" id="prev-btn" disabled>Previous</button>
+          <button class="btn-secondary" onclick="nextQuestion()" id="next-btn">Next</button>
+          <button class="btn-primary" onclick="submitQuiz()" id="submit-btn" style="display: none;">Submit Quiz</button>
+        </div>
+      </div>
+
+      <!-- Results & Leaderboard -->
+      <div id="results" class="quiz-card" style="display: none;">
+        <h3>🎯 Quiz Results</h3>
+        <div id="personal-results">
+          <!-- Personal results will be shown here -->
+        </div>
+        
+        <h4 style="margin-top: 30px;">🏆 Leaderboard</h4>
+        <div id="leaderboard" class="leaderboard">
+          <table>
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Score</th>
+                <th>Time</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-body">
+              <!-- Leaderboard entries will be added here -->
+            </tbody>
+          </table>
+        </div>
+        
+        <button class="btn-primary" onclick="restartQuiz()" style="margin-top: 20px;">Take Quiz Again</button>
+      </div>
+    </div>
   </div>
 
-  <script>
-    // ⭐ Toggle comparison table
-    function toggleComparison() {
-      const section = document.getElementById('comparison-section');
-      section.style.display = section.style.display === 'none' ? 'block' : 'none';
-    }
+  <!-- Timer Display -->
+  <div id="timer" class="timer" style="display: none;">00:00</div>
 
-    // ⭐ API tester
+  <script>
+    // Quiz Data
+    const quizQuestions = [
+      {
+        question: "What is the main advantage of Serverless (FaaS) over traditional PaaS?",
+        options: [
+          "No cold starts",
+          "Pay-per-use pricing model",
+          "Always running server",
+          "Higher memory allocation"
+        ],
+        correct: 1,
+        explanation: "Serverless uses pay-per-execution pricing, while PaaS charges for always-running servers."
+      },
+      {
+        question: "Which platform typically has 'cold starts'?",
+        options: [
+          "Traditional PaaS (Render)",
+          "Serverless Functions (Vercel)",
+          "Both have cold starts",
+          "Neither have cold starts"
+        ],
+        correct: 1,
+        explanation: "Serverless functions may experience cold starts when invoked after being idle."
+      },
+      {
+        question: "What does PaaS stand for?",
+        options: [
+          "Platform as a Service",
+          "Program as a Service",
+          "Process as a Service",
+          "Protocol as a Service"
+        ],
+        correct: 0,
+        explanation: "PaaS stands for Platform as a Service."
+      },
+      {
+        question: "Which is better for long-running background processes?",
+        options: [
+          "Serverless Functions",
+          "Traditional PaaS",
+          "Both are equally good",
+          "Neither can handle long processes"
+        ],
+        correct: 1,
+        explanation: "PaaS is better for long-running processes as serverless has execution time limits."
+      },
+      {
+        question: "What is a key benefit of traditional PaaS?",
+        options: [
+          "No server management",
+          "Instant scaling to zero",
+          "Predictable performance",
+          "No execution time limits"
+        ],
+        correct: 2,
+        explanation: "PaaS provides more predictable performance as servers are always running."
+      },
+      {
+        question: "Which platform automatically scales based on traffic?",
+        options: [
+          "Only PaaS",
+          "Only Serverless",
+          "Both",
+          "Neither"
+        ],
+        correct: 2,
+        explanation: "Both platforms can auto-scale, but serverless scales per function execution."
+      }
+    ];
+
+    // Quiz State
+    let currentStudent = null;
+    let currentQuestion = 0;
+    let answers = [];
+    let quizTimer = null;
+    let startTime = null;
+    let endTime = null;
+    let leaderboard = JSON.parse(localStorage.getItem('cloud-quiz-leaderboard') || '[]');
+
+    // API Testing Function
     async function testEndpoint(endpoint) {
       const responseDiv = document.getElementById('response');
       const platformInfo = document.getElementById('platform-info');
@@ -216,18 +435,39 @@
         const startTime = performance.now();
         const response = await fetch(endpoint);
         const endTime = performance.now();
-        const data = await response.json();
+        
+        const contentType = response.headers.get('content-type');
+        
+        let data;
+        let isJson = false;
+        
+        if (contentType && contentType.includes('application/json')) {
+          data = await response.json();
+          isJson = true;
+        } else {
+          const text = await response.text();
+          data = { 
+            error: 'Received non-JSON response',
+            contentType: contentType,
+            preview: text.substring(0, 200)
+          };
+        }
 
         const loadTime = (endTime - startTime).toFixed(2);
 
-        const isPaaS = data.platform && data.platform.includes('Render');
-        const badgeClass = isPaaS ? 'badge-paas' : 'badge-serverless';
-        const badgeText = isPaaS ? 'PaaS - Always Running' : 'Serverless - On Demand';
-
-        let platformHTML = `<div class="platform-badge ${badgeClass}">${badgeText}</div>`;
-        platformHTML += `<p><strong>Response Time:</strong> ${loadTime}ms</p>`;
-        if (!isPaaS) {
-          platformHTML += `<p><em>Note: First request may be slower (cold start)</em></p>`;
+        let platformHTML = '';
+        if (isJson && data.platform) {
+          const isPaaS = data.platform.includes('Render');
+          const badgeClass = isPaaS ? 'badge-paas' : 'badge-serverless';
+          const badgeText = isPaaS ? 'PaaS - Always Running' : 'Serverless - On Demand';
+          
+          platformHTML = `<div class="platform-badge ${badgeClass}">${badgeText}</div>`;
+          platformHTML += `<p><strong>Response Time:</strong> ${loadTime}ms</p>`;
+          if (!isPaaS && loadTime > 1000) {
+            platformHTML += `<p><em>Note: This longer response might indicate a cold start!</em></p>`;
+          }
+        } else {
+          platformHTML = `<p><strong>Response Time:</strong> ${loadTime}ms</p>`;
         }
 
         platformInfo.innerHTML = platformHTML;
@@ -235,9 +475,212 @@
         responseDiv.classList.add('show');
       } catch (error) {
         platformInfo.innerHTML = '<p><strong>Error occurred</strong></p>';
-        jsonOutput.textContent = 'Error: ' + (error.message || 'Unknown error');
+        jsonOutput.textContent = 'Error: ' + error.message;
         responseDiv.classList.add('show');
       }
+    }
+
+    // Quiz Functions
+    function startQuiz() {
+      const nameInput = document.getElementById('studentName');
+      const studentName = nameInput.value.trim();
+      
+      if (!studentName) {
+        alert('Please enter your name to start the quiz!');
+        nameInput.focus();
+        return;
+      }
+      
+      currentStudent = {
+        name: studentName,
+        startTime: new Date(),
+        answers: []
+      };
+      
+      document.getElementById('registration-card').style.display = 'none';
+      document.getElementById('quiz-questions').style.display = 'block';
+      document.getElementById('timer').style.display = 'block';
+      
+      startTime = Date.now();
+      startTimer();
+      displayQuestion();
+    }
+
+    function startTimer() {
+      const timerElement = document.getElementById('timer');
+      quizTimer = setInterval(() => {
+        const elapsed = Date.now() - startTime;
+        const minutes = Math.floor(elapsed / 60000);
+        const seconds = Math.floor((elapsed % 60000) / 1000);
+        timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      }, 1000);
+    }
+
+    function displayQuestion() {
+      const container = document.getElementById('questions-container');
+      const question = quizQuestions[currentQuestion];
+      
+      let optionsHtml = '';
+      question.options.forEach((option, index) => {
+        const isSelected = currentStudent.answers[currentQuestion] === index;
+        optionsHtml += `
+          <div class="option ${isSelected ? 'selected' : ''}" 
+               onclick="selectAnswer(${index})">
+            ${option}
+          </div>
+        `;
+      });
+      
+      container.innerHTML = `
+        <div class="question">
+          <h4>${question.question}</h4>
+          <div class="options">
+            ${optionsHtml}
+          </div>
+        </div>
+      `;
+      
+      // Update question counter
+      document.getElementById('question-counter').textContent = 
+        `Question ${currentQuestion + 1}/${quizQuestions.length}`;
+      
+      // Update buttons
+      document.getElementById('prev-btn').disabled = currentQuestion === 0;
+      document.getElementById('next-btn').style.display = 
+        currentQuestion === quizQuestions.length - 1 ? 'none' : 'block';
+      document.getElementById('submit-btn').style.display = 
+        currentQuestion === quizQuestions.length - 1 ? 'block' : 'none';
+    }
+
+    function selectAnswer(optionIndex) {
+      currentStudent.answers[currentQuestion] = optionIndex;
+      displayQuestion();
+    }
+
+    function nextQuestion() {
+      if (currentQuestion < quizQuestions.length - 1) {
+        currentQuestion++;
+        displayQuestion();
+      }
+    }
+
+    function prevQuestion() {
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        displayQuestion();
+      }
+    }
+
+    function submitQuiz() {
+      clearInterval(quizTimer);
+      endTime = Date.now();
+      
+      // Calculate score
+      let score = 0;
+      quizQuestions.forEach((q, index) => {
+        if (currentStudent.answers[index] === q.correct) {
+          score++;
+        }
+      });
+      
+      // Calculate time taken
+      const timeTaken = Math.floor((endTime - startTime) / 1000);
+      const minutes = Math.floor(timeTaken / 60);
+      const seconds = timeTaken % 60;
+      
+      // Save to leaderboard
+      const result = {
+        name: currentStudent.name,
+        score: score,
+        total: quizQuestions.length,
+        percentage: Math.round((score / quizQuestions.length) * 100),
+        timeTaken: timeTaken,
+        timeFormatted: `${minutes}m ${seconds}s`,
+        date: new Date().toLocaleString()
+      };
+      
+      leaderboard.push(result);
+      
+      // Sort leaderboard by score (descending) and time (ascending)
+      leaderboard.sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        return a.timeTaken - b.timeTaken;
+      });
+      
+      // Keep only top 10
+      leaderboard = leaderboard.slice(0, 10);
+      
+      // Save to localStorage
+      localStorage.setItem('cloud-quiz-leaderboard', JSON.stringify(leaderboard));
+      
+      // Show results
+      showResults(result);
+    }
+
+    function showResults(result) {
+      document.getElementById('quiz-questions').style.display = 'none';
+      document.getElementById('timer').style.display = 'none';
+      document.getElementById('results').style.display = 'block';
+      
+      // Show personal results
+      const personalResults = document.getElementById('personal-results');
+      personalResults.innerHTML = `
+        <h4>👤 ${result.name}'s Results:</h4>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 20px 0;">
+          <div style="text-align: center; padding: 15px; background: #e6fffa; border-radius: 8px;">
+            <div style="font-size: 24px; font-weight: bold; color: #38b2ac;">${result.score}/${result.total}</div>
+            <div>Score</div>
+          </div>
+          <div style="text-align: center; padding: 15px; background: #fefcbf; border-radius: 8px;">
+            <div style="font-size: 24px; font-weight: bold; color: #d69e2e;">${result.percentage}%</div>
+            <div>Percentage</div>
+          </div>
+          <div style="text-align: center; padding: 15px; background: #fed7d7; border-radius: 8px;">
+            <div style="font-size: 24px; font-weight: bold; color: #f56565;">${result.timeFormatted}</div>
+            <div>Time Taken</div>
+          </div>
+        </div>
+      `;
+      
+      // Show leaderboard
+      const leaderboardBody = document.getElementById('leaderboard-body');
+      leaderboardBody.innerHTML = '';
+      
+      leaderboard.forEach((entry, index) => {
+        const isCurrent = entry.name === result.name && entry.date === result.date;
+        const rowClass = isCurrent ? 'winner' : '';
+        
+        let medal = '';
+        if (index === 0) medal = '<span class="medal gold">🥇</span>';
+        else if (index === 1) medal = '<span class="medal silver">🥈</span>';
+        else if (index === 2) medal = '<span class="medal bronze">🥉</span>';
+        
+        leaderboardBody.innerHTML += `
+          <tr class="${rowClass}">
+            <td>${index + 1} ${medal}</td>
+            <td>${entry.name} ${isCurrent ? ' (You)' : ''}</td>
+            <td>${entry.score}/${entry.total} (${entry.percentage}%)</td>
+            <td>${entry.timeFormatted}</td>
+            <td>${entry.date}</td>
+          </tr>
+        `;
+      });
+    }
+
+    function restartQuiz() {
+      currentStudent = null;
+      currentQuestion = 0;
+      answers = [];
+      
+      document.getElementById('results').style.display = 'none';
+      document.getElementById('registration-card').style.display = 'block';
+      document.getElementById('studentName').value = '';
+      document.getElementById('studentName').focus();
+    }
+
+    // Initialize leaderboard display
+    if (leaderboard.length > 0) {
+      console.log('Leaderboard loaded from localStorage:', leaderboard);
     }
   </script>
 </body>
