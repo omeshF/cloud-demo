@@ -82,6 +82,22 @@
       background: #dd6b20; 
       transform: translateY(-2px); 
     }
+    .btn-summary {
+      background: #805ad5;
+      color: white;
+    }
+    .btn-summary:hover { 
+      background: #6b46c1; 
+      transform: translateY(-2px); 
+    }
+    .btn-quiz {
+      background: #d53f8c;
+      color: white;
+    }
+    .btn-quiz:hover { 
+      background: #b83280; 
+      transform: translateY(-2px); 
+    }
     .btn-danger {
       background: #f56565;
       color: white;
@@ -132,6 +148,49 @@
     .badge-serverless { 
       background: #9ae6b4; 
       color: #22543d; 
+    }
+    
+    /* Summary Table Styles */
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: #f7fafc;
+      border-radius: 12px;
+      overflow: hidden;
+      font-size: 15px;
+      display: none;
+    }
+    .summary-table.show {
+      display: table;
+    }
+    .summary-table th {
+      background: #667eea;
+      color: white;
+      padding: 15px;
+      text-align: left;
+      font-weight: 600;
+    }
+    .summary-table td {
+      padding: 15px;
+      border-bottom: 1px solid #e2e8f0;
+      vertical-align: top;
+    }
+    .summary-table tr:nth-child(even) {
+      background: #edf2f7;
+    }
+    .summary-table tr:last-child td {
+      border-bottom: none;
+    }
+    .summary-table .highlight {
+      font-weight: 600;
+      color: #2d3748;
+    }
+    .summary-table .paas-col {
+      border-left: 4px solid #fbd38d;
+    }
+    .summary-table .serverless-col {
+      border-left: 4px solid #9ae6b4;
     }
     
     /* Quiz Styles */
@@ -254,6 +313,46 @@
     .gold { color: #f6ad55; }
     .silver { color: #a0aec0; }
     .bronze { color: #ed8936; }
+    
+    /* Name Entry Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal {
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .modal h3 {
+      color: #667eea;
+      margin-top: 0;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    /* Quiz Button Container */
+    #quiz-button-container {
+      margin: 20px 0;
+      display: none;
+    }
+    #quiz-button-container.show {
+      display: block;
+    }
   </style>
 </head>
 <body>
@@ -273,6 +372,7 @@
       <button class="btn-primary" onclick="testEndpoint('/api/hello')">Test Hello API</button>
       <button class="btn-secondary" onclick="testEndpoint('/api/users')">Test Users API</button>
       <button class="btn-tertiary" onclick="testEndpoint('/api/time')">Test Time API</button>
+      <button class="btn-summary" onclick="toggleSummary()">Show Summary Table</button>
     </div>
 
     <div id="response" class="response">
@@ -280,22 +380,65 @@
       <pre id="json-output"></pre>
     </div>
 
-    <!-- Quiz Section -->
-    <div class="quiz-section">
+    <!-- Summary Table (Hidden by default) -->
+    <table id="summaryTable" class="summary-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th class="paas-col">PaaS (Render)</th>
+          <th class="serverless-col">Serverless (Vercel)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="highlight">Execution Model</td>
+          <td class="paas-col">Always-running server</td>
+          <td class="serverless-col">On-demand functions</td>
+        </tr>
+        <tr>
+          <td class="highlight">Scaling</td>
+          <td class="paas-col">Manual or auto-scale server instances</td>
+          <td class="serverless-col">Automatic per-function scaling</td>
+        </tr>
+        <tr>
+          <td class="highlight">Cold Starts</td>
+          <td class="paas-col">✅ None (always running)</td>
+          <td class="serverless-col">⚠️ Possible on first request</td>
+        </tr>
+        <tr>
+          <td class="highlight">Cost Model</td>
+          <td class="paas-col">Pay for 24/7 uptime (monthly)</td>
+          <td class="serverless-col">Pay per execution (per request)</td>
+        </tr>
+        <tr>
+          <td class="highlight">Best For</td>
+          <td class="paas-col">Long-running apps, APIs with consistent traffic</td>
+          <td class="serverless-col">Event-driven APIs, sporadic traffic, microservices</td>
+        </tr>
+        <tr>
+          <td class="highlight">Deployment Unit</td>
+          <td class="paas-col">Complete application</td>
+          <td class="serverless-col">Individual functions</td>
+        </tr>
+        <tr>
+          <td class="highlight">State Management</td>
+          <td class="paas-col">Can maintain in-memory state</td>
+          <td class="serverless-col">Stateless - requires external storage</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Quiz Button Container (Hidden until summary is shown) -->
+    <div id="quiz-button-container" class="btn-group">
+      <button class="btn-quiz" onclick="showNameEntry()">Take Cloud Quiz</button>
+    </div>
+
+    <!-- Quiz Section (Hidden by default) -->
+    <div id="quiz-section" class="quiz-section" style="display: none;">
       <h2>Cloud Computing Quiz</h2>
       
-      <!-- Student Registration -->
-      <div id="registration-card" class="quiz-card">
-        <h3>👤 Student Registration</h3>
-        <div class="form-group">
-          <label for="studentName">Enter Your Name:</label>
-          <input type="text" id="studentName" placeholder="e.g., John Doe" />
-        </div>
-        <button class="btn-primary" onclick="startQuiz()">Start Quiz</button>
-      </div>
-
-      <!-- Quiz Questions (Initially Hidden) -->
-      <div id="quiz-questions" class="quiz-card" style="display: none;">
+      <!-- Quiz Questions -->
+      <div id="quiz-questions" class="quiz-card">
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <h3>📝 Cloud Computing Quiz</h3>
           <div id="question-counter">Question 1/6</div>
@@ -344,6 +487,20 @@
 
   <!-- Timer Display -->
   <div id="timer" class="timer" style="display: none;">00:00</div>
+
+  <!-- Name Entry Modal -->
+  <div id="nameModal" class="modal-overlay" style="display: none;">
+    <div class="modal">
+      <h3>Enter Your Name</h3>
+      <div class="form-group">
+        <input type="text" id="studentName" placeholder="e.g., John Doe" onkeypress="handleNameKeypress(event)" />
+      </div>
+      <div class="modal-actions">
+        <button class="btn-primary" onclick="startQuizFromModal()">Start Quiz</button>
+        <button class="btn-tertiary" onclick="hideNameModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
 
   <script>
     // Quiz Data
@@ -424,6 +581,7 @@
     let startTime = null;
     let endTime = null;
     let leaderboard = JSON.parse(localStorage.getItem('cloud-quiz-leaderboard') || '[]');
+    let summaryShown = false;
 
     // API Testing Function
     async function testEndpoint(endpoint) {
@@ -480,30 +638,87 @@
       }
     }
 
-    // Quiz Functions
-    function startQuiz() {
-      const nameInput = document.getElementById('studentName');
-      const studentName = nameInput.value.trim();
+    // Summary Table Function
+    function toggleSummary() {
+      const summaryTable = document.getElementById('summaryTable');
+      const quizButtonContainer = document.getElementById('quiz-button-container');
+      const summaryButton = document.querySelector('.btn-summary');
+      
+      if (summaryTable.classList.contains('show')) {
+        summaryTable.classList.remove('show');
+        summaryButton.textContent = 'Show Summary Table';
+        // Don't hide quiz button if it's already been shown
+      } else {
+        summaryTable.classList.add('show');
+        summaryButton.textContent = 'Hide Summary Table';
+        
+        // Show the quiz button when summary is shown for the first time
+        if (!summaryShown) {
+          quizButtonContainer.classList.add('show');
+          summaryShown = true;
+          
+          // Scroll to quiz button for better visibility
+          setTimeout(() => {
+            quizButtonContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }, 300);
+        }
+      }
+    }
+
+    // Quiz Modal Functions
+    function showNameEntry() {
+      document.getElementById('nameModal').style.display = 'flex';
+      document.getElementById('studentName').focus();
+    }
+
+    function hideNameModal() {
+      document.getElementById('nameModal').style.display = 'none';
+      document.getElementById('studentName').value = '';
+    }
+
+    function handleNameKeypress(event) {
+      if (event.key === 'Enter') {
+        startQuizFromModal();
+      }
+    }
+
+    function startQuizFromModal() {
+      const studentName = document.getElementById('studentName').value.trim();
       
       if (!studentName) {
         alert('Please enter your name to start the quiz!');
-        nameInput.focus();
+        document.getElementById('studentName').focus();
         return;
       }
       
+      hideNameModal();
+      startQuiz(studentName);
+    }
+
+    // Quiz Functions
+    function startQuiz(studentName) {
       currentStudent = {
         name: studentName,
         startTime: new Date(),
         answers: []
       };
       
-      document.getElementById('registration-card').style.display = 'none';
+      // Show quiz section
+      document.getElementById('quiz-section').style.display = 'block';
       document.getElementById('quiz-questions').style.display = 'block';
+      document.getElementById('results').style.display = 'none';
       document.getElementById('timer').style.display = 'block';
+      
+      // Reset to first question
+      currentQuestion = 0;
+      answers = [];
       
       startTime = Date.now();
       startTimer();
       displayQuestion();
+      
+      // Scroll to quiz section
+      document.getElementById('quiz-section').scrollIntoView({ behavior: 'smooth' });
     }
 
     function startTimer() {
@@ -640,6 +855,13 @@
             <div>Time Taken</div>
           </div>
         </div>
+        
+        <div style="background: #f7fafc; padding: 15px; border-radius: 8px; margin-top: 15px;">
+          <strong>Performance:</strong> 
+          ${result.percentage >= 80 ? 'Excellent! 🎉' : 
+            result.percentage >= 60 ? 'Good job! 👍' : 
+            'Keep learning! 📚'}
+        </div>
       `;
       
       // Show leaderboard
@@ -668,14 +890,7 @@
     }
 
     function restartQuiz() {
-      currentStudent = null;
-      currentQuestion = 0;
-      answers = [];
-      
-      document.getElementById('results').style.display = 'none';
-      document.getElementById('registration-card').style.display = 'block';
-      document.getElementById('studentName').value = '';
-      document.getElementById('studentName').focus();
+      showNameEntry();
     }
 
     // Initialize leaderboard display
